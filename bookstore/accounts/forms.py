@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
@@ -6,8 +8,8 @@ from .models import User, Address
 
 
 class UserCreateForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30)
-    last_name = forms.CharField(max_length=30)
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
     email_address = forms.EmailField(max_length=254, required=True)
 
     class Meta:
@@ -19,6 +21,44 @@ class UserCreateForm(UserCreationForm):
         self.fields["email_address"].label = "Email Address"
         self.fields["first_name"].label = "First Name"
         self.fields["last_name"].label = "Last Name"
+
+    def clean_nickname(self):
+        nickname = self.cleaned_data['nickname']
+
+        if not re.search(r'^\w+$', nickname):
+            raise forms.ValidationError('Nickname can only contain alphanumeric characters and underscore.')
+
+        try:
+            User.objects.get(nickname=nickname)
+
+        except User.DoesNotExist:
+            return nickname
+
+        raise forms.ValidationError('Nickname already exists.')
+
+    def clean_password2(self):
+        if 'password1' in self.cleaned_data:
+            password1 = self.cleaned_data['password1']
+            password2 = self.cleaned_data['password2']
+            if password1 == password2:
+                return password2
+
+            raise forms.ValidationError('Password do not match!')
+
+    def clean_email_address(self):
+        email = self.cleaned_data['email_address']
+
+        # check if email address is valid
+        if not re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email):
+            raise forms.ValidationError('Email Address is invalid format.')
+
+        # check if email address already exits
+        try:
+            User.objects.get(email_address=email)
+        except User.DoesNotExist:
+            return email
+
+        raise forms.ValidationError('Email Address already exists.')
 
 
 class EditUserProfileForm(ModelForm):
@@ -41,8 +81,6 @@ class EditUserProfileForm(ModelForm):
             return nickname
 
         raise forms.ValidationError('Nickname already exists.')
-
-        return nickname
 
     def clean_email_address(self):
         email_address = self.cleaned_data['email_address']
