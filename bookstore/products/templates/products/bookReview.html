@@ -1,0 +1,41 @@
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+<!-- Review Form Modal Content -->
+
+    <form class="form-horizontal" method="POST" action="{% url 'products:addBookReview' %}">
+        {% csrf_token %}
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 class="modal-title">Write Review!</h3>
+        </div>
+        <div class="container">
+            <div class="modal-body">
+                <!-- Review form -->
+                {% for field in form %}
+
+                <div class="form-group">
+                    <div class="col-sm-pull-1 col-sm-2 control-label">
+                        {% bootstrap_label field.label %}
+                    </div>
+                    <div class="col-sm-pull-1 col-sm-3">
+                        {% bootstrap_field field show_label=False form_group_class=None placeholder="" %}
+                    </div>
+                </div>
+
+                {% endfor %}
+                <input type="hidden" name="book_title" value="{{ book.title}}">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-md btn-primary">Submit Review</button>
+        </div>
+    </form>
+

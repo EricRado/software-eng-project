@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% load static from staticfiles %}
+
+{% block content %}
+
+<div class="container">
+
+    {% if tech_valleys %}
+         <p style="padding:10px"></p>
+         <h1 style="text-align:center;">Tech Valley Times {% block result_title %}{% endblock %}</h1>
+
+         <!-- Contains style and format for a book from a query result -->
+         <p style="padding: 10px"></p>
+
+        {% for tech_valley in tech_valleys %}
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-sm-offset-3">
+                    <img src="{% static  tech_valley.book.cover_file_name  %}" class="result" height="200" width="200">
+                </div>
+
+                <div class="col-xs-12 col-sm-5 col-sm-push-1">
+                    <a href="{% url 'products:bookDetail' tech_valley.book.title %}" style="color:gray;"><h4>{{ tech_valley.book.title }} </h4></a>
+                    <p style="color:gray"> by {{ tech_valley.book.author.first_name }} {{ tech_valley.book.author.last_name }} </p>
+                    <p style="padding:5px"> </p>
+                    <span class="badge">${{ tech_valley.book.price }}</span>
+                </div>
+            </div>
+            <hr>
+        {% endfor%}
+    {% endif %}
+
+    {% if books %}
+        <p style="padding:10px"></p>
+
+        <h1 style="text-align:center;">{% block result_title_repeat %}{% endblock %}</h1>
+
+        <!-- Contains style and format for a book from a query result -->
+        <p style="padding: 10px"></p>
+
+        {% for book in books %}
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-sm-offset-3">
+                    <img src="{% static  book.cover_file_name  %}" class="result" height="200" width="200">
+                </div>
+
+                <div class="col-xs-12 col-sm-5 col-sm-push-1">
+                    <a href="{% url 'products:bookDetail' book.title %}" style="color:gray;"><h4>{{ book.title }} </h4></a>
+                    <p style="color:gray"> by {{ book.author.first_name }} {{ book.author.last_name }} </p>
+                    <p style="padding:5px"> </p>
+                    <span class="badge">${{ book.price }}</span>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<div>
+    <p style="padding:25px"></p>
+</div>
+
+{% endblock %}
