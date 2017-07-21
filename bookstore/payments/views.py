@@ -324,3 +324,13 @@ def move_to_shopping_cart(request, book_id):
     messages.success(request, book.title + ' was successfully moved to shopping cart.')
 
     return HttpResponseRedirect(reverse('payments:shoppingCart'))
+
+#########################################################################################################
+##                                   PAYMENT FUNCTIONS                                                 ##
+########################################################################################################
+
+
+def order_submit(request):
+    user_id = request.user.user_id
+
+    return render(request, 'payments/cartPurchased.html')

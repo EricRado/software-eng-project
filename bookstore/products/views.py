@@ -4,7 +4,6 @@ from django.shortcuts import render
 from django.db.models import Q
 from django.urls import reverse
 from . import models
-from django.views.generic import CreateView
 from .forms import ReviewForm
 
 
@@ -57,24 +56,28 @@ def search(request):
 ##                                   REVIEW FUNCTIONS                                                  ##
 ########################################################################################################
 
-class ReviewCreate(CreateView):
+def get_review_form(request):
+    # get url of current page
+    next = request.POST.get('next', '/')
+    form = ReviewForm(request.POST)
     template_name = 'products/bookReview.html'
-    model = models.Review
-    form_class = ReviewForm
 
-    def form_valid(self, form):
-        # get url of current page
-        next = self.request.POST.get('next', '/')
+    print('I am currently running this function!!!')
 
-        if not self.request.user.is_authenticated():
-            messages.error(self.request, 'Please login first to review book.')
-            return HttpResponseRedirect(next)
+    if not request.user.is_authenticated():
+        messages.error(request, 'Please login first to review book.')
+        return HttpResponseRedirect(next)
 
-        form.instance.user = self.request.user
-        form.save()
-        return super(ReviewCreate, self).form_valid(form)
+    if request.method == 'POST':
+        if form.is_valid:
+            # assign user id to review form
+            form.instance.user = request.user
+            form.save()
+    else:
+        form = ReviewForm()
 
-    def get_success_url(self):
-        return reverse('next')
+    return HttpResponseRedirect(next)
+
+
 
 

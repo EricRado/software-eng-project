@@ -11,15 +11,15 @@
 }
 
 .row-footer{
-    background-color: darkgrey;
+    background-color: #cce7ff;
     margin:0px auto;
     padding:20px 0px 20px 0px;
 }
 
 .jumbotron{
-    padding:85px 30px 85px 30px;
+    padding:60px 30px 55px 30px;
     margin:0px auto;
-    background: white;
+    background: #cce7ff;
     color:black;
 }
 
@@ -32,7 +32,6 @@ address{
 body{
     padding:100px 0px 0px 0px;
     z-index: 0;
-    background:white;
 }
 
 .navbar-inverse{
@@ -44,13 +43,13 @@ body{
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus{
     color: gold;
-    background: silver;
+    background: white;
 }
 
 .navbar-inverse .navbar-nav > .open > a,
 .navbar-inverse .navbar-nav > .open > a:hover,
 .navbar-inverse .navbar-nav > .open > a:focus{
-    color: goldenrod;
+    color: white;
     background: black;
 }
 

@@ -87,14 +87,17 @@
                     <p class="fieldSizeFont">Taxes ${{ cart.tax_price }}</p>
                     <hr>
                     <p class="fieldSizeFont">Total Price ${{ cart.total_price }}</p>
+                    <p style="padding:5px"></p>
+                    <a class="btn btn-lg btn-primary" href="{% url 'payments:orderSubmit' %}">Purchase Order</a>
                 </div>
             {% endfor %}
+    {% endif %}
 
         <div class="row">
             <div class="col-xs-8 col-sm-8">
                 {% if future_order_items %}
                     <h2>Future Order</h2>
-                {% endif %}
+
                 <p style="padding:10px"></p>
                 {% for future_order_item in future_order_items %}
                     <div class="row">
@@ -124,11 +127,11 @@
                 <hr>
                 {% endfor %}
             </div>
+            {% endif %}
         </div>
 
-        </div>
+    </div>
 
-    {% endif %}
     <p style="padding:25px"></p>
 
 </div>
