@@ -49,9 +49,10 @@
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
                     <li><a class="nav-link" href="#">Hello {{ user.nickname }}</a></li>
-                    {% endif %}
+
                     <li><a class="nav-link" href="{% url 'payments:shoppingCart' %}"><span class="glyphicon glyphicon-shopping-cart">
                          </span> Cart</a></li>
+                    {% endif %}
                 </ul>
 
             </div>

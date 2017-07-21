@@ -1,3 +1,4 @@
+from django.core.checks import messages
 from django.shortcuts import render
 from django.db.models import Q
 from django.urls import reverse
@@ -60,7 +61,11 @@ class ReviewCreate(CreateView):
     model = models.Review
     form_class = ReviewForm
 
-    def form_valid(self,form):
+    def form_valid(self, form):
+        
+        if not self.request.user.is_authenticated():
+            messages.error(self.request, 'Please login first to review book.')
+
         form.instance.user = self.request.user
         form.save()
         return super(ReviewCreate, self).form_valid(form)

@@ -1,11 +1,9 @@
 from django.contrib.auth import login, logout, authenticate
-from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.views import generic
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic import DeleteView, CreateView
+from django.views.generic import DeleteView, CreateView, RedirectView
 from payments.models import Order, FutureOrder
 from .forms import EditUserProfileForm, UserCreateForm, AddressForm
 from .models import User, Address
@@ -63,25 +61,16 @@ def login_view(request):
                         request.session['orderId'] = latest_cart.id
                         return HttpResponseRedirect(next)
 
-                # create  new shopping cart for first time users
-                else:
-                    new_cart = create_shopping_cart(current_user.user_id)
-                    request.session['orderId'] = new_cart.id
-
-                    if not future_order_cart:
-                        future_cart = create_future_order(current_user.user_id)
-                        request.session['fOrderId'] = future_cart.id
-
-                    return HttpResponseRedirect(next)
-
             # account is not active
             else:
-                return HttpResponse("Your account has been disabled.")
+                messages.error(request,'Your account has been disabled.')
+                return HttpResponseRedirect(next)
 
         # no user with matching credentials
         else:
             # bad login credentials were provided
-            return HttpResponse("Invalid login details supplied.")
+            messages.error(request, 'Sorry the credentials you input, were incorrect.')
+            return HttpResponseRedirect(next)
 
 
 # create cart for new users or customers with previous cart already purchased
@@ -125,20 +114,44 @@ def manage_account(request):
     return render(request, "accounts/manageAccount.html", {'form': form})
 
 
-class SignUpView(generic.CreateView):
+class SignUpView(CreateView):
     form_class = UserCreateForm
-    success_url = reverse_lazy("index")
+    model = User
     template_name = "accounts/signUp.html"
+    success_url = reverse_lazy('index')
 
-    '''
-        def form_valid(self, form):
-            form.save()
-    '''
+    def form_valid(self, form):
+        new_user = form.save()
+        messages.info(self.request, 'Thanks for registering. You are now logged in.')
 
-class LogoutView(generic.RedirectView):
+        print("Nickname : " + str(form.cleaned_data['nickname']))
+        print('Password : ' + str(form.cleaned_data['password1']))
+
+        # after the new user is created, login the user
+        new_user = authenticate(username=form.cleaned_data['nickname'], password=form.cleaned_data['password1'])
+        login(self.request, new_user)
+        print("Logged in User : " + self.request.user.nickname)
+
+        if self.request.user.is_authenticated():
+            print("Yo im online whats up")
+        else:
+            print("Its not working!!!!")
+
+        # create a new shopping cart and add id to session
+        shopping_cart = create_shopping_cart(self.request.user.user_id)
+        self.request.session['orderId'] = shopping_cart.id
+
+        # create a new future cart and add id to session
+        future_cart = create_future_order(self.request.user.user_id)
+        self.request.session['fOrderId'] = future_cart.id
+
+        return super(SignUpView, self).form_valid(form)
+
+
+class LogoutView(RedirectView):
     url = reverse_lazy("index")
 
-    def get(self,request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         logout(request)
         messages.success(request, 'Successfully logged out.')
         return super().get(request, *args, **kwargs)

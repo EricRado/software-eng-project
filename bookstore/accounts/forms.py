@@ -13,14 +13,19 @@ class UserCreateForm(UserCreationForm):
     email_address = forms.EmailField(max_length=254, required=True)
 
     class Meta:
-        fields = ("nickname","email_address", 'first_name', 'last_name', "password1","password2")
-        model = get_user_model()
+        fields = ("nickname", "email_address", 'first_name', 'last_name', "password1", "password2")
+        model = User
 
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name in ['password1', 'password2']:
+            self.fields[field_name].help_text = None
+
         self.fields["email_address"].label = "Email Address"
         self.fields["first_name"].label = "First Name"
         self.fields["last_name"].label = "Last Name"
+        self.fields["password2"].label = "Password Confirmation"
 
     def clean_nickname(self):
         nickname = self.cleaned_data['nickname']
@@ -49,7 +54,7 @@ class UserCreateForm(UserCreationForm):
         email = self.cleaned_data['email_address']
 
         # check if email address is valid
-        if not re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email):
+        if not re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email.lower()):
             raise forms.ValidationError('Email Address is invalid format.')
 
         # check if email address already exits

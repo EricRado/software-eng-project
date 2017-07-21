@@ -95,10 +95,17 @@ def display_shopping_cart(request):
 
 
 def add_book_to_cart(request):
+    # get url of current page
+    next = request.POST.get('next', '/')
+
+    # verify if a user is in session or redirect with a login message
+    if not request.user.is_authenticated():
+        messages.error(request, 'Please login first to add books to the shopping cart.')
+        return HttpResponseRedirect(next)
+
     # get parameters from quantity form
     quantity = request.POST.get('quantity')
     book_id = request.POST.get('bookId')
-    next = request.POST.get('next', '/')
 
     # get book with id
     book = Book.objects.get(pk=book_id)
@@ -242,11 +249,18 @@ def check_book_stock(book, quantity):
 ########################################################################################################
 
 def add_future_order_item(request):
+    # get url from current page
+    next = request.POST.get('next', '/')
+
+    # verify if a user is in session or redirect with a login message
+    if not request.user.is_authenticated():
+        messages.error(request, 'Please login first to add books to a future order.')
+        return HttpResponseRedirect(next)
 
     f_order_id = request.session['fOrderId']
 
+    # get book id
     book_id = request.POST.get('book_id')
-    next = request.POST.get('next', '/')
 
     # check to see if book already exists in future order
     future_book_exists = FutureOrderItem.objects.filter(future_order_id=f_order_id, book_id=book_id)
