@@ -19,7 +19,7 @@
 .jumbotron{
     padding:85px 30px 85px 30px;
     margin:0px auto;
-    background: silver;
+    background: white;
     color:black;
 }
 
@@ -32,6 +32,7 @@ address{
 body{
     padding:100px 0px 0px 0px;
     z-index: 0;
+    background:white;
 }
 
 .navbar-inverse{
@@ -116,4 +117,8 @@ table.bookDetails{
 
 table.bookDetails td.bookDetails{
     width:50px;
+}
+
+hr{
+    border-color:black;
 }

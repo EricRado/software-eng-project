@@ -1,4 +1,5 @@
 from django.core.checks import messages
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.db.models import Q
 from django.urls import reverse
@@ -62,9 +63,12 @@ class ReviewCreate(CreateView):
     form_class = ReviewForm
 
     def form_valid(self, form):
-        
+        # get url of current page
+        next = self.request.POST.get('next', '/')
+
         if not self.request.user.is_authenticated():
             messages.error(self.request, 'Please login first to review book.')
+            return HttpResponseRedirect(next)
 
         form.instance.user = self.request.user
         form.save()
