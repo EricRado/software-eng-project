@@ -349,18 +349,14 @@ def order_submit(request):
         purchased_order_item.payed_item = True
         purchased_order_item.save()
 
-        print("Purchased Book : " + purchased_order_item.book.title + " and quantity : " + str(purchased_order_item.quantity))
-
         # update the quantity of the book that was recently purchased by user
         book = Book.objects.get(id=purchased_order_item.book.id)
         book.quantity -= purchased_order_item.quantity
 
-        print('New quantity for : ' + book.title + ' is : ' + str(book.quantity))
-
         book.save()
 
     # make a new shopping cart for the user
-    new_cart = create_shopping_cart(request.session.user.user_id)
+    new_cart = create_shopping_cart(request.user.user_id)
     request.session['orderId'] = new_cart.id
 
     return render(request, 'payments/cartPurchased.html')
