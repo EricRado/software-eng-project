@@ -2,9 +2,9 @@ from django.core.checks import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.db.models import Q
-from django.urls import reverse
 from . import models
 from .forms import ReviewForm
+from payments.models import Order,OrderItem
 
 
 def books_by_genre(request, genre):
@@ -40,8 +40,13 @@ def get_book_details(request,title):
     book = models.Book.objects.get(title=title)
     book_by_author = models.Book.objects.filter(author_id=book.author.id)
     reviews = models.Review.objects.filter(book_id=book.id)
+
+    # check if user purchased book
+    allowed_to_review = purchased_book(book.id, request.user.user_id)
+    print('Allowed to review : ' + str(allowed_to_review))
+
     return render(request, 'products/bookDetail.html', {'book': book, 'book_by_author': book_by_author,
-                                                        'reviews': reviews})
+                                                        'reviews': reviews, 'allowed_to_review': allowed_to_review})
 
 
 def search(request):
@@ -78,6 +83,24 @@ def get_review_form(request):
 
     return HttpResponseRedirect(next)
 
+
+def purchased_book(book_id, user_id):
+    all_purchased_orders = Order.objects.filter(user_id=user_id, payed_order=True)
+
+    # the user has not purchased anything from book store
+    if not all_purchased_orders:
+        return False
+
+    # search through each purchased order, check with book id if order item is in purchased order
+    for order in all_purchased_orders:
+
+        payed_book = OrderItem.objects.filter(order_id=order.id, book_id=book_id)
+
+        # book has been found end for loop iteration
+        if payed_book:
+            return True
+
+    return False
 
 
 
