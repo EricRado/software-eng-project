@@ -36,14 +36,14 @@ def get_tech_valley_books(request):
     return render(request, 'products/bookResults.html', {'tech_valleys': tech_valleys})
 
 
-def get_book_details(request,title):
+def get_book_details(request, title):
     book = models.Book.objects.get(title=title)
     book_by_author = models.Book.objects.filter(author_id=book.author.id)
     reviews = models.Review.objects.filter(book_id=book.id)
 
-    # check if user purchased book
-    allowed_to_review = purchased_book(book.id, request.user.user_id)
-    print('Allowed to review : ' + str(allowed_to_review))
+    if request.user:
+        # check if user purchased book
+        allowed_to_review = purchased_book(book.id, request.user.user_id)
 
     return render(request, 'products/bookDetail.html', {'book': book, 'book_by_author': book_by_author,
                                                         'reviews': reviews, 'allowed_to_review': allowed_to_review})
@@ -67,17 +67,15 @@ def get_review_form(request):
     form = ReviewForm(request.POST)
     template_name = 'products/bookReview.html'
 
-    print('I am currently running this function!!!')
-
-    if not request.user.is_authenticated():
-        messages.error(request, 'Please login first to review book.')
-        return HttpResponseRedirect(next)
-
     if request.method == 'POST':
         if form.is_valid:
             # assign user id to review form
-            form.instance.user = request.user
-            form.save()
+            review = form.save(commit=False)
+            review.user = request.user
+            review.book_id = request.POST.get('book_id')
+            review.save()
+
+            messages.success(request, 'Review was submitted successfully.')
     else:
         form = ReviewForm()
 

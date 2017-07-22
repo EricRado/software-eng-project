@@ -115,9 +115,10 @@
 
             {% endfor %}
 
-
+            {% if allowed_to_review%}
             <a class="btn btn-lg btn-success" data-toggle="modal" data-target="#modalReview"
                href="#">Write Review</a>
+            {% endif %}
 
             <!-- Review Form Modal -->
             <div class="modal fade" id="modalReview" role="dialog">

@@ -1,31 +1,27 @@
 {% load static from staticfiles %}
-{% load bootstrap3 %}
 
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
 
-<div class="container">
-    <h2>Book Review</h2>
-    <p style="padding:20px"></p>
-    <form method="POST" action="{% url 'products:addBookReview' %}" class="form-horizontal" role="form">{% csrf_token %}
-            <div class="form-group">
-                <input type="hidden" name="next" value="{{ request.path }}">
-                <input type="hidden" name="book_id" value="{{ book.id }}">
+<form method="POST" action="{% url 'products:addBookReview' %}" class="form-horizontal" role="form">{% csrf_token %}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="modal-title">Write A Review!</h3>
+    </div>
+
+    <div class="container">
+        <div class="modal-body">
+            <div class="form-inline">
                 <div class="col-sm-2 control-label">
-                    <label for="user_rating">Rating</label>
+                    <label class="radio inline control-label">Rating</label>
                 </div>
-                <div class="col-sm-4">
-                    <input class="form-control" type="number" name="user_rating" id="user_rating" min="1" max="10" value="5">
-                </div>
+
+                <label class="radio"><input type="radio" name="user_rating" value="1"> 1 </label>
+                <label class="radio"><input type="radio" name="user_rating" value="2"> 2 </label>
+                <label class="radio"><input type="radio" name="user_rating" value="3"> 3 </label>
+                <label class="radio"><input type="radio" name="user_rating" value="4"> 4 </label>
+                <label class="radio"><input type="radio" name="user_rating" value="5"> 5 </label>
+
             </div>
+            <p style="padding:10px;"></p>
             <div class="form-group">
                 <div class="col-sm-2 control-label">
                     <label for="review_header">Review Heading</label>
@@ -39,7 +35,7 @@
                     <label for="review_body">Review Body</label>
                 </div>
                 <div class="col-sm-4">
-                    <input class="form-control" type="textarea" rows="8" cols="80" name="review_body" id="review_body">
+                    <textarea class="form-control"  rows="5" cols="60" name="review_body" id="review_body"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -47,15 +43,18 @@
                     <label for="anonymous">Anonymous</label>
                 </div>
                 <div class="col-sm-4">
-                    <input type="hidden" name="anonymous" value="False">
-                    <input class="form-control" type="checkbox" name="anonymous" id="anonymous" value="True">
+                    <input type="checkbox" name="anonymous" id="anonymous" value="True">
                 </div>
             </div>
-            <p style="padding:10px;"></p>
-
-        <div class="col-sm-offset-3 col-sm-2">
-            <button type="submit" class="btn btn-md btn-primary">Submit</button>
         </div>
-    </form>
-    <p style="padding:25px"></p>
-</div>
+    </div>
+
+    <input type="hidden" name="next" value="{{ request.path }}">
+    <input type="hidden" name="book_id" value="{{ book.id }}">
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-md btn-primary">Submit Review</button>
+    </div>
+</form>
+
