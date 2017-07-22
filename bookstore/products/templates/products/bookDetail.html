@@ -107,17 +107,21 @@
     <hr>
 
     <div class="row">
-        <div class="col-xs-12 col-sm-3 col-sm-push-1">
+        <div class="col-xs-12 col-sm-8 col-sm-push-1">
             <h2>Customer Reviews</h2>
 
+            {% if not reviews %}
+                <p>Purchase the book to be the first to leave a review! </p>
+            {% endif %}
+
             {% for review in reviews %}
-
-
+                <p>Hey there is a book review</p>
             {% endfor %}
 
-
-            <a class="btn btn-lg btn-success" data-toggle="modal" data-target="#modalReview"
-               href="#">Write Review</a>
+            {% if allowed_to_review %}
+                <a class="btn btn-lg btn-success" data-toggle="modal" data-target="#modalReview"
+                   href="#">Write Review</a>
+            {% endif %}
 
             <!-- Review Form Modal -->
             <div class="modal fade" id="modalReview" role="dialog">
@@ -150,7 +154,7 @@
 </div>
 
 
-{% endblock %}
+{% endblock  %}
 
 {% block javascript_code %}
 <script>

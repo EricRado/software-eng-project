@@ -1,10 +1,11 @@
-from django.core.checks import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.db.models import Q
-from django.urls import reverse
+from django.contrib import messages
+from products.models import Review
 from . import models
 from .forms import ReviewForm
+from payments.models import Order,OrderItem
 
 
 def books_by_genre(request, genre):
@@ -36,12 +37,17 @@ def get_tech_valley_books(request):
     return render(request, 'products/bookResults.html', {'tech_valleys': tech_valleys})
 
 
-def get_book_details(request,title):
+def get_book_details(request, title):
     book = models.Book.objects.get(title=title)
     book_by_author = models.Book.objects.filter(author_id=book.author.id)
     reviews = models.Review.objects.filter(book_id=book.id)
+
+    if request.user:
+        # check if user purchased book
+        allowed_to_review = purchased_book(book.id, request.user.user_id)
+
     return render(request, 'products/bookDetail.html', {'book': book, 'book_by_author': book_by_author,
-                                                        'reviews': reviews})
+                                                        'reviews': reviews, 'allowed_to_review': allowed_to_review})
 
 
 def search(request):
@@ -57,27 +63,61 @@ def search(request):
 ########################################################################################################
 
 def get_review_form(request):
-    # get url of current page
+    # get url of current page and other parameters
     next = request.POST.get('next', '/')
+    book_id = request.POST.get('book_id')
+    user_id = request.user.user_id
+
+    # check if user previously reviewed book
+    check = user_left_review(user_id,book_id)
+    if check:
+        messages.error(request, 'You already left a review for this book.')
+
     form = ReviewForm(request.POST)
     template_name = 'products/bookReview.html'
 
-    print('I am currently running this function!!!')
-
-    if not request.user.is_authenticated():
-        messages.error(request, 'Please login first to review book.')
-        return HttpResponseRedirect(next)
-
     if request.method == 'POST':
-        if form.is_valid:
+        if form.is_valid():
             # assign user id to review form
-            form.instance.user = request.user
-            form.save()
+            review = form.save(commit=False)
+            review.user = user_id
+            review.book_id = book_id
+            review.save()
+
+            messages.success(request, 'Review was submitted successfully.')
     else:
         form = ReviewForm()
 
     return HttpResponseRedirect(next)
 
+
+# check is a user already reviewed the book
+def user_left_review(user_id, book_id):
+    try:
+        Review.objects.get(user_id=user_id, book_id=book_id )
+    except Review.DoesNotExist():
+        return False
+
+    return True
+
+
+def purchased_book(book_id, user_id):
+    all_purchased_orders = Order.objects.filter(user_id=user_id, payed_order=True)
+
+    # the user has not purchased anything from book store
+    if not all_purchased_orders:
+        return False
+
+    # search through each purchased order, check with book id if order item is in purchased order
+    for order in all_purchased_orders:
+
+        payed_book = OrderItem.objects.filter(order_id=order.id, book_id=book_id)
+
+        # book has been found end for loop iteration
+        if payed_book:
+            return True
+
+    return False
 
 
 

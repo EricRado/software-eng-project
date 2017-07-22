@@ -6,11 +6,11 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from __future__ import unicode_literals
-from datetime import datetime
 from accounts.models import User
 from products.models import Book
 from django.db import models
 from accounts.models import Address
+from django.utils import timezone
 
 
 class CreditCard(models.Model):
@@ -36,8 +36,8 @@ class Order(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     price = models.DecimalField(max_digits=10,decimal_places=2,default=0)
     tax_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    date_created = models.DateTimeField(default=datetime.now, blank=True)
-    date_ordered = models.DateTimeField(default=datetime.now, blank=True)
+    date_created = models.DateTimeField(default=timezone.now, blank=True)
+    date_ordered = models.DateTimeField(default=timezone.now, blank=True)
     payed_order = models.BooleanField(default=False)
     # add later an address field
     address = models.ForeignKey(Address, on_delete=models.CASCADE, blank=True, null=True, related_name='addresses')
