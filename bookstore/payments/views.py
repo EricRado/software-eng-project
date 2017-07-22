@@ -1,4 +1,5 @@
 import decimal
+from django.utils import timezone
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -9,6 +10,7 @@ from products.models import Book
 from .models import OrderItem, Order, CreditCard, FutureOrderItem
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from accounts.views import create_shopping_cart
 
 
 #########################################################################################################
@@ -337,6 +339,7 @@ def order_submit(request):
     # set order was purchased to true
     order = Order.objects.get(id=order_id)
     order.payed_order = True
+    order.date_ordered = timezone.now()
     order.save()
 
     purchased_order_items = OrderItem.objects.filter(order_id=order_id)
@@ -346,14 +349,18 @@ def order_submit(request):
         purchased_order_item.payed_item = True
         purchased_order_item.save()
 
-        print("Purchased Book : " + purchased_order_item.book.title + " and quantity : " + purchased_order_item.quantity)
+        print("Purchased Book : " + purchased_order_item.book.title + " and quantity : " + str(purchased_order_item.quantity))
 
         # update the quantity of the book that was recently purchased by user
         book = Book.objects.get(id=purchased_order_item.book.id)
         book.quantity -= purchased_order_item.quantity
 
-        print('New quantity for : ' + book.title + ' is : ' + book.quantity)
+        print('New quantity for : ' + book.title + ' is : ' + str(book.quantity))
 
         book.save()
+
+    # make a new shopping cart for the user
+    new_cart = create_shopping_cart(request.session.user.user_id)
+    request.session['orderId'] = new_cart.id
 
     return render(request, 'payments/cartPurchased.html')

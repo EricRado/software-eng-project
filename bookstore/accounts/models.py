@@ -6,9 +6,6 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from __future__ import unicode_literals
-
-
-
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -25,7 +22,7 @@ class UserManager(BaseUserManager):
         if not nickname:
             raise ValueError("Users must enter a nickname")
 
-        user = self.model(email_address=self.normalize_email(email_address),nickname=nickname)
+        user = self.model(email_address=self.normalize_email(email_address), nickname=nickname)
 
         user.set_password(password)
         user.save()
@@ -49,7 +46,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_login = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-
 
     objects = UserManager()
 
@@ -78,7 +74,6 @@ class Address(models.Model):
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=2)
     zip_code = models.CharField(max_length=5)
-
 
     def __str__(self):
         return "@{}".format(self.user.nickname) + " addr : " + self.street_address
