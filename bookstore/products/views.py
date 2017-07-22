@@ -1,7 +1,8 @@
-from django.core.checks import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.db.models import Q
+from django.contrib import messages
+from products.models import Review
 from . import models
 from .forms import ReviewForm
 from payments.models import Order,OrderItem
@@ -62,17 +63,25 @@ def search(request):
 ########################################################################################################
 
 def get_review_form(request):
-    # get url of current page
+    # get url of current page and other parameters
     next = request.POST.get('next', '/')
+    book_id = request.POST.get('book_id')
+    user_id = request.user.user_id
+
+    # check if user previously reviewed book
+    check = user_left_review(user_id,book_id)
+    if check:
+        messages.error(request, 'You already left a review for this book.')
+
     form = ReviewForm(request.POST)
     template_name = 'products/bookReview.html'
 
     if request.method == 'POST':
-        if form.is_valid:
+        if form.is_valid():
             # assign user id to review form
             review = form.save(commit=False)
-            review.user = request.user
-            review.book_id = request.POST.get('book_id')
+            review.user = user_id
+            review.book_id = book_id
             review.save()
 
             messages.success(request, 'Review was submitted successfully.')
@@ -80,6 +89,16 @@ def get_review_form(request):
         form = ReviewForm()
 
     return HttpResponseRedirect(next)
+
+
+# check is a user already reviewed the book
+def user_left_review(user_id, book_id):
+    try:
+        Review.objects.get(user_id=user_id, book_id=book_id )
+    except Review.DoesNotExist():
+        return False
+
+    return True
 
 
 def purchased_book(book_id, user_id):
