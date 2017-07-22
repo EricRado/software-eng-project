@@ -63,7 +63,7 @@ def login_view(request):
 
             # account is not active
             else:
-                messages.error(request,'Your account has been disabled.')
+                messages.error(request, 'Your account has been disabled.')
                 return HttpResponseRedirect(next)
 
         # no user with matching credentials
