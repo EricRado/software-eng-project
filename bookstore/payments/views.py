@@ -82,6 +82,12 @@ def manage_credit_card(request):
 ########################################################################################################
 
 def display_shopping_cart(request):
+    # get previous url
+    next = request.GET.get('next', '/')
+    if not request.user.is_authenticated():
+        messages.error(request, 'You must sign in first to access shopping cart.')
+        return HttpResponseRedirect(next)
+
     # get shopping cart id
     order_id = request.session['orderId']
 
