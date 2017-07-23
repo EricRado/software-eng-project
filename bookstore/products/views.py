@@ -97,7 +97,7 @@ def get_review_form(request):
 def user_left_review(user_id, book_id):
     try:
         Review.objects.get(user_id=user_id, book_id=book_id )
-    except Review.DoesNotExist():
+    except Review.DoesNotExist:
         return False
 
     return True
