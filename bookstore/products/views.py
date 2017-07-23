@@ -5,7 +5,7 @@ from django.contrib import messages
 from products.models import Review
 from . import models
 from .forms import ReviewForm
-from payments.models import Order,OrderItem
+from payments.models import Order, OrderItem
 
 
 def books_by_genre(request, genre):
@@ -98,11 +98,8 @@ def get_review_form(request):
 # check is a user already reviewed the book
 def user_left_review(user_id, book_id):
     try:
-<<<<<<< HEAD
         Review.objects.get(user_id=user_id, book_id=book_id )
-=======
-        Review.objects.get(user_id=user_id, book_id=book_id)
->>>>>>> website-looks-feature
+
     except Review.DoesNotExist:
         return False
 
