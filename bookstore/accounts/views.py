@@ -1,11 +1,11 @@
 from django.contrib.auth import login, logout, authenticate
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import DeleteView, CreateView, RedirectView
 from payments.models import Order, FutureOrder
-from .forms import EditUserProfileForm, UserCreateForm, AddressForm
+from .forms import EditUserProfileForm, UserCreateForm, AddressForm, LoginForm
 from .models import User, Address
 from django.contrib import messages
 
@@ -16,11 +16,13 @@ from django.contrib import messages
 
 @csrf_protect
 def login_view(request):
+    next = request.POST.get('next', '/')
+    form = LoginForm
 
     if request.method == 'POST':
+
         username = request.POST['nickname']
         password = request.POST['password']
-        next = request.POST.get('next', '/')
 
         user = authenticate(username=username, password=password)
 
@@ -32,45 +34,41 @@ def login_view(request):
                 login(request, user)
                 current_user = request.user
 
-                # find the latest shopping cart by user
-                latest_cart = Order.objects.filter(
-                     user_id=current_user.user_id
-                ).order_by('date_created').last()
-
                 # find future order list of user
                 future_order_cart = FutureOrder.objects.get(
                     user_id=current_user.user_id
                 )
 
                 # set future order id into request.session
-                if future_order_cart:
-                    request.session['fOrderId'] = future_order_cart.id
+                request.session['fOrderId'] = future_order_cart.id
 
-                # check if latest cart exists or has already been purchased
-                if latest_cart:
+                # find the latest shopping cart by user
+                latest_cart = Order.objects.filter(
+                    user_id=current_user.user_id
+                ).order_by('date_created').last()
 
-                    # create new shopping cart if latest cart has been payed
-                    if latest_cart.payed_order:
-                        new_cart = create_shopping_cart(current_user.user_id)
-                        request.session['orderId'] = new_cart.id
-                        return HttpResponseRedirect(next)
+                # create new shopping cart if latest cart has been payed
+                if latest_cart.payed_order:
+                    new_cart = create_shopping_cart(current_user.user_id)
+                    request.session['orderId'] = new_cart.id
 
-                    # use existing shopping cart that has not been payed for
-                    # used when shoppers log off then log back in with preexisting shopping cart and books stored inside
-                    else:
-                        request.session['orderId'] = latest_cart.id
-                        return HttpResponseRedirect(next)
+                # use existing shopping cart that has not been payed for
+                # used when shoppers log off then log back in with preexisting shopping cart and books stored inside
+                else:
+                    request.session['orderId'] = latest_cart.id
+
+                messages.success(request, 'User has successfully logged in.')
 
             # account is not active
             else:
                 messages.error(request, 'Your account has been disabled.')
-                return HttpResponseRedirect(next)
 
         # no user with matching credentials
         else:
             # bad login credentials were provided
             messages.error(request, 'Sorry the credentials you input, were incorrect.')
-            return HttpResponseRedirect(next)
+
+        return HttpResponseRedirect(next)
 
 
 # create cart for new users or customers with previous cart already purchased
@@ -122,20 +120,11 @@ class SignUpView(CreateView):
 
     def form_valid(self, form):
         new_user = form.save()
-        messages.info(self.request, 'Thanks for registering. You are now logged in.')
-
-        print("Nickname : " + str(form.cleaned_data['nickname']))
-        print('Password : ' + str(form.cleaned_data['password1']))
+        messages.info(self.request, 'Thanks for registering. You may now login.')
 
         # after the new user is created, login the user
         new_user = authenticate(username=form.cleaned_data['nickname'], password=form.cleaned_data['password1'])
         login(self.request, new_user)
-        print("Logged in User : " + self.request.user.nickname)
-
-        if self.request.user.is_authenticated():
-            print("Yo im online whats up")
-        else:
-            print("Its not working!!!!")
 
         # create a new shopping cart and add id to session
         shopping_cart = create_shopping_cart(self.request.user.user_id)

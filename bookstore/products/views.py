@@ -72,8 +72,10 @@ def get_review_form(request):
 
     # check if user previously reviewed book
     check = user_left_review(user_id,book_id)
+    print('CHECK IF user left a review : ' + str(check))
     if check:
         messages.error(request, 'You already left a review for this book.')
+        return HttpResponseRedirect(next)
 
     form = ReviewForm(request.POST)
     template_name = 'products/bookReview.html'
@@ -96,7 +98,11 @@ def get_review_form(request):
 # check is a user already reviewed the book
 def user_left_review(user_id, book_id):
     try:
+<<<<<<< HEAD
         Review.objects.get(user_id=user_id, book_id=book_id )
+=======
+        Review.objects.get(user_id=user_id, book_id=book_id)
+>>>>>>> website-looks-feature
     except Review.DoesNotExist:
         return False
 
