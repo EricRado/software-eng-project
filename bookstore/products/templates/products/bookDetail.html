@@ -114,10 +114,6 @@
                 <p>Purchase the book to be the first to leave a review! </p>
             {% endif %}
 
-            {% for review in reviews %}
-                <p>Hey there is a book review</p>
-            {% endfor %}
-
             {% if allowed_to_review %}
                 <a class="btn btn-lg btn-success" data-toggle="modal" data-target="#modalReview"
                    href="#">Write Review</a>
@@ -208,4 +204,3 @@
 
 </script>
 {% endblock %}
-
