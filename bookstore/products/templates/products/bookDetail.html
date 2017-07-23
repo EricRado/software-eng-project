@@ -36,7 +36,7 @@
         <div class="col-xs-3 col-sm-3 col-sm-push-2" style="border-right:1px solid white; height:310px;">
             <h3>{{ book.title }}</h3>
             <h4>by {{ book.author.first_name }} {{book.author.last_name }}</h4>
-            <h4>
+            <h3>
             {% if book.rating >= 4 %}
                 <span class="label label-success">Rating:  {{ book.rating }}</span>
             {% elif 2 < book.rating < 4 %}
@@ -44,7 +44,7 @@
             {% else %}
                 <span class="label label-danger">Rating:  {{ book.rating }}</span>
             {% endif %}
-          </h4>
+          </h3>
         </div>
         <div class="col-xs-3 col-sm-2 col-sm-push-3"  >
             <h3>Paperback</h3>
