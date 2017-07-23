@@ -42,9 +42,11 @@ def get_book_details(request, title):
     book_by_author = models.Book.objects.filter(author_id=book.author.id)
     reviews = models.Review.objects.filter(book_id=book.id)
 
-    if request.user:
+    if request.user.is_authenticated:
         # check if user purchased book
         allowed_to_review = purchased_book(book.id, request.user.user_id)
+    else:
+        allowed_to_review = False
 
     return render(request, 'products/bookDetail.html', {'book': book, 'book_by_author': book_by_author,
                                                         'reviews': reviews, 'allowed_to_review': allowed_to_review})
