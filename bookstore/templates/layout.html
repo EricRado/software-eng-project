@@ -134,6 +134,9 @@
         </div>
     </nav>
 
+    {# Display django.contrib.messages as Bootstrap alerts #}
+    {% bootstrap_messages %}
+    
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible" role="alert">
