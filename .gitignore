@@ -3,6 +3,21 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+<<<<<<< HEAD
+*.pyc
+*.pyc
+*.pyc
+*.pyc
+*.pyc
+<<<<<<< HEAD
+=======
+*.pyc
+*.pyc
+>>>>>>> Payment-Processing-feature
+*.pyc
+*.pyc
+*.pyc
+=======
 # C extensions
 *.so
 
@@ -106,3 +121,4 @@ aws_rds_auth.json
 .idea/
 migrations/
 www/
+>>>>>>> cb65eca23b3b11b8492c7139d6ed21f9453995c9
