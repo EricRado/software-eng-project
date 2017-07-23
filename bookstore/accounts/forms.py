@@ -7,6 +7,25 @@ from django import forms
 from .models import User, Address
 
 
+class LoginForm(forms.Form):
+    nickname = forms.CharField(required=True)
+    password = forms.CharField(required=True)
+
+    class Meta:
+        fields = ('nickname', 'password')
+        model = User
+
+    def clean_nickname(self):
+        nickname = self.cleaned_data['nickname']
+
+        try:
+            User.objects.get(nickname=nickname)
+        except User.DoesNotExist:
+            raise forms.ValidationError('Sorry that user does not exist.')
+
+        return nickname
+
+
 class UserCreateForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=True)
     last_name = forms.CharField(max_length=30, required=True)

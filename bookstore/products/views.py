@@ -7,7 +7,7 @@ from . import models
 from accounts.models import User
 from products.models import Book
 from .forms import ReviewForm
-from payments.models import Order,OrderItem
+from payments.models import Order, OrderItem
 
 
 def books_by_genre(request, genre):
@@ -74,8 +74,10 @@ def get_review_form(request):
 
     # check if user previously reviewed book
     check = user_left_review(user_id,book_id)
+    print('CHECK IF user left a review : ' + str(check))
     if check:
         messages.error(request, 'You already left a review for this book.')
+        return HttpResponseRedirect(next)
 
     print(request.POST)
     form = ReviewForm(request.POST)
@@ -100,6 +102,7 @@ def get_review_form(request):
 def user_left_review(user_id, book_id):
     try:
         Review.objects.get(user_id=user_id, book_id=book_id )
+
     except Review.DoesNotExist:
         return False
 

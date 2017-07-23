@@ -17,6 +17,7 @@ __pycache__/
 *.pyc
 *.pyc
 *.pyc
+<<<<<<< HEAD
 =======
 # C extensions
 *.so
@@ -122,3 +123,5 @@ aws_rds_auth.json
 migrations/
 www/
 >>>>>>> cb65eca23b3b11b8492c7139d6ed21f9453995c9
+=======
+>>>>>>> website-looks-feature

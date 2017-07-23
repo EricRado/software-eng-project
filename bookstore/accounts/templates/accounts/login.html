@@ -17,6 +17,9 @@
                     </div>
                     <input type="hidden" name="next" value="{{ request.path }}">
                 </div>
+                {% if form.errors %}
+                    <p style="color:red">Invalid credentials!!!</p>
+                {% endif %}
             </div>
         </div>
         <div class="modal-footer">
@@ -24,3 +27,15 @@
             <button type="submit" class="btn btn-primary">Sign In</button>
         </div>
 </form>
+
+{% block javascript_code %}
+
+{% if form.errors %}
+    <script>
+    $(function() {
+      $('#modalSignIn').modal({show: true});
+    });
+    </script>
+{% endif %}
+
+{% endblock %}
