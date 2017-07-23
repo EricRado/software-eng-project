@@ -4,6 +4,8 @@ from django.db.models import Q
 from django.contrib import messages
 from products.models import Review
 from . import models
+from accounts.models import User
+from products.models import Book
 from .forms import ReviewForm
 from payments.models import Order,OrderItem
 
@@ -75,6 +77,7 @@ def get_review_form(request):
     if check:
         messages.error(request, 'You already left a review for this book.')
 
+    print(request.POST)
     form = ReviewForm(request.POST)
     template_name = 'products/bookReview.html'
 
@@ -82,8 +85,8 @@ def get_review_form(request):
         if form.is_valid():
             # assign user id to review form
             review = form.save(commit=False)
-            review.user = user_id
-            review.book_id = book_id
+            review.user = User.objects.get(user_id=user_id)
+            review.book = Book.objects.get(id=book_id)
             review.save()
 
             messages.success(request, 'Review was submitted successfully.')
@@ -120,6 +123,3 @@ def purchased_book(book_id, user_id):
             return True
 
     return False
-
-
-
