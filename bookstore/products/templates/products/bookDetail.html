@@ -128,7 +128,41 @@
                </div>
             </div>
 
-
+            {% for review in reviews %}
+            <div class="well">
+                <div class="row">
+                    <h2>
+                        {{ review.review_header }}
+                        {% if review.user_rating >= 4 %}
+                            <span class="label label-success">Rating:  {{ review.user_rating }}</span>
+                        {% elif 2 < review.user_rating < 4 %}
+                            <span class="label label-warning">Rating:  {{ review.user_rating }}</span>
+                        {% else %}
+                            <span class="label label-danger">Rating:  {{ review.user_rating }}</span>
+                        {% endif %}
+                    </h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>
+                            {% if review.anonymous is True %}
+                                By Anonymous
+                            {% else %}
+                                By {{review.user.nickname}}
+                            {% endif %}
+                        </h4>
+                    </div>
+                    <div class="col-md-4">
+                        <h4>
+                            on {{review.published_date}}
+                        </h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <p>{{review.review_body}}</p>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 
