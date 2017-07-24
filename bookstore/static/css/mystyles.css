@@ -121,3 +121,7 @@ table.bookDetails td.bookDetails{
 hr{
     border-color:black;
 }
+
+.carousel-inner > .item > img {
+    margin: 0 auto;
+}
