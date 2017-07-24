@@ -158,3 +158,39 @@ class AddressForm(ModelForm):
         fields = ['street_address', 'city', 'state', 'zip_code']
 
 
+class PasswordChangeForm(forms.Form):
+    current_password = forms.CharField(label='Current Password', widget=forms.PasswordInput(render_value=False))
+    new_password = forms.CharField(label='New Password', widget=forms.PasswordInput(render_value=False))
+    retyped_password = forms.CharField(label='Retype New Password', widget=forms.PasswordInput(render_value=False))
+
+    def __init__(self, data= None, user=None, *args, **kwargs):
+        self.user = user
+        super(PasswordChangeForm, self).__init__(data=data, *args, **kwargs)
+
+    def clean_current_password(self):
+        current_password = self.cleaned_data['current_password']
+
+        if not self.user.check_password(current_password):
+            raise forms.ValidationError('Wrong current password')
+
+        return current_password
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        new_password = self.cleaned_data['new_password']
+        retyped_password = self.cleaned_data['retyped_password']
+
+        if len(new_password) == 0 or len(retyped_password) == 0:
+            raise forms.ValidationError('Blank password fields.')
+
+        if new_password != retyped_password:
+            raise forms.ValidationError('New password and retyped password do not match.')
+
+        return cleaned_data
+
+    def save(self):
+        new_password = self.cleaned_data['new_password']
+        self.user.set_password(new_password)
+        return self.user
+
+
