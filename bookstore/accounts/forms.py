@@ -158,14 +158,14 @@ class AddressForm(ModelForm):
         fields = ['street_address', 'city', 'state', 'zip_code']
 
 
-class PasswordChangeForm(forms.Form):
+class ChangePassword(forms.Form):
     current_password = forms.CharField(label='Current Password', widget=forms.PasswordInput(render_value=False))
     new_password = forms.CharField(label='New Password', widget=forms.PasswordInput(render_value=False))
     retyped_password = forms.CharField(label='Retype New Password', widget=forms.PasswordInput(render_value=False))
 
     def __init__(self, data= None, user=None, *args, **kwargs):
         self.user = user
-        super(PasswordChangeForm, self).__init__(data=data, *args, **kwargs)
+        super(ChangePassword, self).__init__(data=data, *args, **kwargs)
 
     def clean_current_password(self):
         current_password = self.cleaned_data['current_password']

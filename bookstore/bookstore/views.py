@@ -6,12 +6,6 @@ from django.views.decorators.csrf import csrf_protect
 
 
 def index(request):
-
-    if request.user.is_authenticated():
-        print('User is online!!!!')
-    else:
-        print('User is not online!!!!!')
-
     return render(request, 'index.html')
 
 
