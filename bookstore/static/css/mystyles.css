@@ -1,3 +1,8 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 .row-header{
     margin:0px auto;
     padding:0px auto;
@@ -32,6 +37,8 @@ address{
 body{
     padding:100px 0px 0px 0px;
     z-index: 0;
+    background-image: url("img/bg.png");
+    font-family: Century Gothic;
 }
 
 .navbar-inverse{

@@ -1,13 +1,17 @@
 {% extends 'layout.html' %}
 
+{% load staticfiles%}
+
 {% block title %}Cart Purchase Message{% endblock %}
 
 {% block content %}
 <div class="container">
     &nbsp
-    <h1>Thank you for your purchase!</h1>
-    <div class="row">.
-        <p>Your purchase has been processed and will ship to your chosen location within 3-5 business days.</p>
+    <h1><font size="20"><center>Thank you for your purchase!</center></font></h1>
+    <div class="row">
+        <center><p style="padding:40px">Your purchase has been processed and will ship to your chosen location within 3-5 business days.</p></center>
     </div>
+    &nbsp
+    <center><img id="imageResource" src="{% static 'img/comeagain.png' %}" class="result" height="400" width="600"></center>
 </div>
 {% endblock %}

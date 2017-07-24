@@ -21,6 +21,7 @@
     </style>
 </head>
 
+
 <body style="background-color: aliceblue">
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 
@@ -49,9 +50,9 @@
                 <!-- Link to Shopping Cart -->
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
-                    <li><a class="nav-link" href="#">Hello {{ user.nickname }}</a></li>
+                    <li><a style="color: white" class="nav-link" href="#">Hello {{ user.nickname }}</a></li>
                     {% endif %}
-                    <li><a class="nav-link" href="{% url 'payments:shoppingCart' %}"><span class="glyphicon glyphicon-shopping-cart">
+                    <li><a style="color: white" class="nav-link" href="{% url 'payments:shoppingCart' %}"><span class="glyphicon glyphicon-shopping-cart">
                          </span> Cart</a></li>
                 </ul>
 
@@ -72,18 +73,18 @@
 
                     <!-- Link to Home page -->
                     <li>
-                        <a class="navTabColor" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+                        <a style="color: white" class="navTabColor" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
                     </li>
                      <!-- Link to Tech Valley Times Books -->
--                    <li><a href="{% url 'products:techValleyTimes' %}">Tech Valley Times</a></li>
--
--                    <!-- Link to Best Sellers -->
--                    <li><a href="{% url 'products:topSellingBooks' %}">Best Sellers</a></li>
--
+                    <li><a style="color: white" href="{% url 'products:techValleyTimes' %}">Tech Valley Times</a></li>
+
+                    <!-- Link to Best Sellers -->
+                    <li><a style="color: white" href="{% url 'products:topSellingBooks' %}">Best Sellers</a></li>
+
 
                     <!-- Link to Dropdown for genre of Books -->
                     <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button"
+                        <a style="color: white" class="dropdown-toggle" data-toggle="dropdown" role="button"
                            href="#" aria-haspopup="true" aria-expanded="false">Books<span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
@@ -97,25 +98,25 @@
                     </li>
 
                     <!-- Link to About page -->
-                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a style="color: white" href="{% url 'about' %}">About</a></li>
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
 
                     {% if user.is_authenticated %}
                     <li>
-                        <a href="{% url 'accounts:logout' %}">Logout</a>
+                        <a style="color: white" href="{% url 'accounts:logout' %}">Logout</a>
                     </li>
                     {% else %}
                     <li>
                         <!-- Login id target -->
-                        <a href="#" class="nav-link" data-toggle="modal" data-target="#modalSignIn">Sign In</a>
+                        <a style="color: white" href="#" class="nav-link" data-toggle="modal" data-target="#modalSignIn">Sign In</a>
                     </li>
                     {% endif %}
 
                     {% if user.is_authenticated %}
                     <!-- Link to Dropdown for My Account -->
-                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" role="button"
+                    <li class="dropdown"><a style="color: white" class="dropdown-toggle" data-toggle="dropdown" role="button"
                             href="" aria-haspopup="true" aria-expanded="false">My Account<span class="caret"></span>
                     </a>
                         <ul class="dropdown-menu">
@@ -126,7 +127,7 @@
                     </li>
                     {% else %}
                     <li>
-                        <a href="{% url 'accounts:signup' %}">Sign Up</a>
+                        <a style="color: white" href="{% url 'accounts:signup' %}">Sign Up</a>
                     </li>
                     {% endif %}
                 </ul>
