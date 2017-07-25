@@ -147,16 +147,17 @@ class LogoutView(RedirectView):
 
 
 def change_password(request):
-    form = ChangePassword(data=request.POST, user=request.user)
+    form = ChangePassword(user=request.user, data=request.POST)
     if request.method == 'POST':
 
         if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
+            new_password = form.cleaned_data['new_password']
+            request.user.set_password(new_password)
+            request.user.save()
+            update_session_auth_hash(request, request.user)
             messages.success(request, 'Your password has been successfully changed.')
             return HttpResponseRedirect(reverse('index'))
-        else:
-            messages.error(request, 'Please correct the error below.')
+
     else:
         form = ChangePassword()
 
