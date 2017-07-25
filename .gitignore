@@ -127,3 +127,10 @@ www/
 >>>>>>> website-looks-feature
 *.pyc
 *.pyc
+<<<<<<< HEAD
+=======
+*.pyc
+*.pyc
+*.pyc
+>>>>>>> password-feature
+*.pyc

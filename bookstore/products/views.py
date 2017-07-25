@@ -74,12 +74,11 @@ def get_review_form(request):
 
     # check if user previously reviewed book
     check = user_left_review(user_id,book_id)
-    print('CHECK IF user left a review : ' + str(check))
     if check:
         messages.error(request, 'You already left a review for this book.')
         return HttpResponseRedirect(next)
 
-    print(request.POST)
+
     form = ReviewForm(request.POST)
     template_name = 'products/bookReview.html'
 

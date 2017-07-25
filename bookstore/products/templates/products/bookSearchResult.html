@@ -1,6 +1,11 @@
 {% extends 'products/bookResults.html' %}
+{% load static from staticfiles %}
 {% block title %} Search Result{% endblock %}
 
 {% block result_title_repeat %}
 Search for "{{ search_request }}"
+{% endblock %}
+
+{% block empty_img %}
+    <img class="img-responsive" src="{% static 'img/noResultsFound.png' %}" style="margin: 0 auto; padding-top:60px;">
 {% endblock %}

@@ -1,11 +1,11 @@
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import DeleteView, CreateView, RedirectView
 from payments.models import Order, FutureOrder
-from .forms import EditUserProfileForm, UserCreateForm, AddressForm, LoginForm
+from .forms import EditUserProfileForm, UserCreateForm, AddressForm, LoginForm, ChangePassword
 from .models import User, Address
 from django.contrib import messages
 
@@ -144,6 +144,24 @@ class LogoutView(RedirectView):
         logout(request)
         messages.success(request, 'Successfully logged out.')
         return super().get(request, *args, **kwargs)
+
+
+def change_password(request):
+    form = ChangePassword(user=request.user, data=request.POST)
+    if request.method == 'POST':
+
+        if form.is_valid():
+            new_password = form.cleaned_data['new_password']
+            request.user.set_password(new_password)
+            request.user.save()
+            update_session_auth_hash(request, request.user)
+            messages.success(request, 'Your password has been successfully changed.')
+            return HttpResponseRedirect(reverse('index'))
+
+    else:
+        form = ChangePassword()
+
+    return render(request,'accounts/changePasswordForm.html', {'form': form})
 
 
 #########################################################################################################
