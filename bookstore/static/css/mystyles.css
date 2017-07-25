@@ -35,7 +35,7 @@ address{
 }
 
 body{
-    padding:100px 0px 0px 0px;
+    padding-top:150px;
     z-index: 0;
     background-image: url("img/bg.png");
     font-family: Century Gothic;
