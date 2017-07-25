@@ -121,11 +121,11 @@
                     </a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'accounts:manageAccount' %}">Manage Account</a></li>
-<<<<<<< HEAD
+
                             <li><a href="#">Change Password</a></li>
-=======
+
                             <li><a href="{% url 'accounts:changePassword' %}">Change Password</a></li>
->>>>>>> password-feature
+
                             <li><a href="{% url 'payments:displayCC' %}">Manage Payment Method</a></li>
                             <li><a href="{% url 'accounts:displayAddress' %}">Manage Shipping Address</a></li>
                         </ul>
@@ -140,10 +140,6 @@
         </div>
     </nav>
 
-<<<<<<< HEAD
-=======
-    
->>>>>>> password-feature
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible" role="alert">
