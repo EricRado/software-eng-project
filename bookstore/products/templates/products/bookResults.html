@@ -30,10 +30,11 @@
         {% endfor%}
     {% endif %}
 
-    {% if books %}
-        <p style="padding:10px"></p>
 
-        <h1 style="text-align:center;">{% block result_title_repeat %}{% endblock %}</h1>
+    <p style="padding:10px"></p>
+    <h1 style="text-align:center;">{% block result_title_repeat %}{% endblock %}</h1>
+
+    {% if books %}
 
         <!-- Contains style and format for a book from a query result -->
         <p style="padding: 10px"></p>
@@ -62,6 +63,9 @@
             </div>
             <hr>
         {% endfor %}
+
+    {% else %}
+    {% block empty_img %} {% endblock %}
     {% endif %}
 </div>
 
