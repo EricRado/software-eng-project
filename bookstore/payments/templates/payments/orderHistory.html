@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% load static from staticfiles %}
+
+{% block title %}Order History {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1 style="padding-bottom:50px;">Order History</h1>
+    {% for order in orders %}
+        <h3>Order Id # {{ order.id }}</h3>
+        <p style="padding:5px;"></p>
+        <div class="row" >
+            <div class="col-xs-9 col-sm-9 col-sm-push-2" >
+                {% for order_item in order_items %}
+                    {% if order.id == order_item.order.id %}
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-4">
+                                <img src="{% static order_item.book.cover_file_name %} " class="img-responsive"
+                                     style="width:200px; height:200px;">
+                            </div>
+                            <div class="col-xs-8 col-sm-8">
+                                <p class="fieldSizeFont">{{ order_item.book.title }}</p>
+                                <p class="fieldSizeFont">Price : ${{order_item.book.price }}</p>
+                                <p class="fieldSizeFont">Quantity Purchased : {{ order_item.quantity }}</p>
+                                <p class="fieldSizeFont">Quantity Price Total : ${{ order_item.book_price_quantity }}</p>
+                            </div>
+                        </div>
+                        <p style="padding:25px;"></p>
+                    {% endif %}
+                {% endfor %}
+                <hr>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6">
+                        <p class="fieldSizeFont">Order Subtotal : ${{ order.price }} </p>
+                    </div>
+                    <div class="col-xs-6 col-sm-6">
+                        <p class="fieldSizeFont">Order Total : ${{ order.total_price }} </p>
+                    </div>
+                </div>
+                <p style="padding:20px;"></p>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% if not orders %}
+    <img src="{% static 'img/orderHistoryEmpty.png' %}" class="img-responsive" style="margin: 0 auto; padding-top:60px;">
+    {% endif %}
+</div>
+
+{% endblock %}

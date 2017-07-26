@@ -83,13 +83,6 @@
                     <!-- Link to Best Sellers -->
                     <li><a style="color: white" href="{% url 'products:topSellingBooks' %}">Best Sellers</a></li>
 
-                     <!-- Link to Tech Valley Times Books -->
-                    <li><a style="color: white" href="{% url 'products:techValleyTimes' %}">Tech Valley Times</a></li>
-
-                    <!-- Link to Best Sellers -->
-                    <li><a style="color: white" href="{% url 'products:topSellingBooks' %}">Best Sellers</a></li>
-
-
 
                     <!-- Link to Dropdown for genre of Books -->
                     <li class="dropdown">
@@ -135,7 +128,7 @@
 
                             <li><a href="{% url 'payments:displayCC' %}">Manage Payment Method</a></li>
                             <li><a href="{% url 'accounts:displayAddress' %}">Manage Shipping Address</a></li>
-                            <li><a href="#">Order History</a></li>
+                            <li><a href="{% url 'payments:orderHistory' %}">Purchase History</a></li>
                         </ul>
                     </li>
                     {% else %}

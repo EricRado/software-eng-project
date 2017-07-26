@@ -38,6 +38,7 @@ class Book(models.Model):
     publisher = models.CharField(max_length=255, blank=True, null=True)
     release_date = models.DateField(blank=True, null=True)
     amount_sold = models.IntegerField(blank=True, null=True)
+    review_count = models.IntegerField(blank=True, default=20)
 
     def __str__(self):
         return self.title

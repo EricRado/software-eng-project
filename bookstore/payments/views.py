@@ -365,3 +365,14 @@ def order_submit(request):
     request.session['orderId'] = new_cart.id
 
     return render(request, 'payments/cartPurchased.html')
+
+#########################################################################################################
+##                                   ORDER FUNCTIONS                                                  ##
+########################################################################################################
+
+
+def display_order_history(request):
+    user_id = request.user.user_id
+    orders = Order.objects.filter(user_id=user_id, payed_order=True)
+    order_items = OrderItem.objects.filter(order_id__in=[order.id for order in orders])
+    return render(request, 'payments/orderHistory.html', {'orders': orders, 'order_items':order_items})

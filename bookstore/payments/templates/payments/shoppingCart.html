@@ -25,7 +25,7 @@
             {% for order_item in order_items %}
                 <div class="row">
                     <div class="col-xs-4 col-sm-4">
-                        <img src="{% static order_item.book.cover_file_name %}" height="170" width="180">
+                        <img src="{% static order_item.book.cover_file_name %}" class="img-responsive" style="width:180px; height:180px;">
                     </div>
                     <div class="col-xs-3 col-sm-3">
                         <p class="fieldSizeFont">{{ order_item.book.title }}</p>
@@ -71,10 +71,25 @@
 
                 <!-- display the total price of the order -->
                 <div class="col-xs-4 col-sm-3 col-sm-push-1">
-                    <p class="fieldSizeFont">Order Subtotal ${{ cart.price }} </p>
-                    <p class="fieldSizeFont">Taxes ${{ cart.tax_price }}</p>
+                    <table style="table-layout:fixed; width:390px;">
+                        <tr>
+                            <td class="fieldSizeFont">Order Subtotal</td>
+                            <td class="fieldSizeFont">${{ cart.price }}</td>
+
+                        </tr>
+                        <tr>
+                            <td class="fieldSizeFont">Taxes</td>
+                            <td class="fieldSizeFont">${{ cart.tax_price }}</td>
+                        </tr>
+
+                    </table>
                     <hr>
-                    <p class="fieldSizeFont">Total Price ${{ cart.total_price }}</p>
+                    <table style="table-layout:fixed; width:390px;">
+                        <tr>
+                            <td class="fieldSizeFont">Total Price</td>
+                            <td class="fieldSizeFont">${{ cart.total_price }}</td>
+                        </tr>
+                    </table>
                     <p style="padding:5px"></p>
                     <a class="btn btn-lg btn-primary" href="{% url 'payments:orderSubmit' %}">Purchase Order</a>
                 </div>
