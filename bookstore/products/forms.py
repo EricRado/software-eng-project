@@ -1,5 +1,5 @@
 from django import forms
-from .models import Review
+from .models import Review, Comment
 
 CHOICES = [('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')]
 
@@ -13,3 +13,13 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ['user_rating', 'review_header', 'review_body', 'anonymous']
+
+
+class CommentForm(forms.ModelForm):
+	book_id = forms.CharField(widget=forms.HiddenInput())
+	user = forms.CharField(label="user", max_length=512)
+	comment = forms.CharField(label="comment", max_length=4095)
+
+	class Meta:
+		model = Comment
+		fields = ('book_id', 'comment', 'user')

@@ -10,6 +10,13 @@ from .forms import ReviewForm
 from payments.models import Order, OrderItem
 import decimal
 
+def author(request, author_id):
+    book = models.Book.objects.filter(author_id=author_id)
+    for c in book:
+        print(c.id)
+    author = models.Author.objects.get(id=author_id)
+    print(author.id)
+    return render(request, 'products/author.html', {'book': book, 'author': author})
 
 def books_by_genre(request, genre):
     tech_valleys = models.TechValleyTimes.objects.filter(book__genre=genre)
@@ -50,9 +57,18 @@ def get_book_details(request, title):
         allowed_to_review = purchased_book(book.id, request.user.user_id)
     else:
         allowed_to_review = False
+			
+    if request.method == "POST":
+        newcomment = request.POST.get('newcomment')
+        newbook_id = request.POST.get('book_id')
+        newuser = request.POST.get('user')
+        if newuser == "":
+            newuser = 'Anonymous'
+        add_comment = models.Comment.objects.create(book_id=newbook_id, user=newuser, comment=newcomment)
 
-    return render(request, 'products/bookDetail.html', {'book': book, 'book_by_author': book_by_author,
-                                                        'reviews': reviews, 'allowed_to_review': allowed_to_review})
+    comment = models.Comment.objects.filter(book_id=book.id)
+
+    return render(request, 'products/bookDetail.html', {'book': book, 'book_by_author': book_by_author, 'allowed_to_review': allowed_to_review, 'reviews':reviews, 'comment': comment})
 
 
 def search(request):
@@ -144,3 +160,4 @@ def modifiy_book_rating(book, rating):
     book.rating = decimal.Decimal(total_rating) / decimal.Decimal(book.review_count)
 
     book.save()
+

@@ -47,7 +47,18 @@ class Book(models.Model):
         managed = True
         db_table = 'books'
 
+class Comment(models.Model):
+    book_id = models.AutoField(primary_key=True)
+    comment = models.CharField(max_length=2048)
+    user = models.CharField(max_length=64)
 
+    def __str__(self):
+        return self.book_id
+
+    class Meta:
+        managed = True
+        db_table = 'comment'
+		
 class TechValleyTimes(models.Model):
     id = models.AutoField(primary_key=True)
     book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)

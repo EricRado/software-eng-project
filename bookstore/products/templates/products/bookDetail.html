@@ -1,199 +1,329 @@
 {% extends 'layout.html' %}
 {% load static from staticfiles %}
-{% load bootstrap3 %}
-
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-
-{# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
-
 {% block title %} {{ book.title }} {% endblock %}
 {% block content %}
 
+<html>
+    <head>
+        <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+        <title>{{ book.title }}</title>
+        <style>
 
-<div class="container">
-    <p style="padding:25px"> </p>
+            body {
+                background-color: lightblue;
+            }
+			.centeredText {
+				right: 0px;
+				float: left;
+				width: 100%;
+				text-align: center;
+				font-weight: bold;
+			}
 
-    <div class="row">
-        <div class="col-xs-6 col-sm-3 col-sm-push-1">
-            <a href="#" id="pop">
-                <img id="imageResource" src="{% static  book.cover_file_name  %}" class="img-responsive"
-                     style="cursor:zoom-in; height:320px; width:auto;">
-            </a>
+			.column0 {
+				float: left;
+				width: 10%;
+			}
+
+			.column1 {
+				float: left;
+				width: 60%;
+			}
+
+			.column2 {
+				float: left;
+				width: 20%;
+			}
+            .comment-bar {
+                background-color: rgb(150,150,150);
+                border: 3px solid white;
+                width: 80%;
+                padding: 5px;
+            }
+
+			.commentBlock {
+                margin-left: 15px;
+                width: 100%;
+                font-style: italics;
+            }
+
+			.comment-text {
+				margin-left: 5%;
+			}
+
+			.comment-Text-Area {
+				align-content:center;
+				width: 80%
+			}
+
+			#cover-img {
+				position: relative;
+				margin-left: 2%;
+				width: 100%
+
+			}
+
+
+			.coverImgDiv {
+				margin-top: 2%;
+				width: 100%;
+				align-content: center;
+
+		   	}
+
+
+			.description-bar {
+				display: inline-block;
+                background-color: lightgray;
+                border: 3px solid white;
+                margin-left: 10%;
+				width: 80%;
+				height: 30%;
+                padding: 5px;
+            }
+
+            .descriptor {
+				font-weight: bold;
+            }
+
+
+			.description-text-div {
+				margin-left: 10%;
+			}
+
+			.header-bar {
+				display: inline-block;
+                width: 100%;
+				height: 30%;
+                padding: 5px;
+				margin-left: 10%;
+            }
+
+            .header-bar2 {
+				display: inline-block;
+                width: 100%;
+				height: 30%;
+                padding: 5px;
+            }
+
+            .header-div1 {
+				float: left;
+				margin-left: 0%;
+				width: 65%;
+		   }
+
+		   .header-div2 {
+				float: left;
+				margin-left: 0%;
+				width: 25%;
+		   }
+
+		   .field {
+		   		color: gray;
+		   }
+
+            .purchase-bar {
+                background-color: lightgray;
+                border: 3px solid white;
+                width: 100%;
+				height: 30%;
+                padding: 5px;
+				margin-top: 2%;
+				margin-left: 2%;
+            }
+
+			.quotation {
+				font-size: 150%;
+				font-family: Arial;
+			}
+
+			.review-bar {
+                background-color: lightgray;
+                border: 3px solid white;
+				width: 100%;
+                padding: 5px;
+            }
+
+            .right-align {
+            	float:left;
+                text-align: right;
+                width: 100%;
+            }
+
+			.row2 {
+			    margin-left: 5%;
+				width: 80%;
+                float: left;
+			}
+
+			.title-bar {
+				display: inline-block;
+                width: 100%;
+				height: 30%;
+                padding: 5px;
+            }
+
+            .titleDescriptor {
+				font-weight: bold;
+            }
+
+            .title-text {
+                float: left;
+				width: 100%;
+				text-align: center;
+                color: black;
+				font-size: 300%;
+            }
+
+            .title-text2 {
+                float: left;
+				width: 100%;
+				text-align: center;
+                color: black;
+				font-size: 150%;
+            }
+
+
+        </style>
+    </head>
+    <body>
+		<br>
+		<div class="column0"></div>
+		<div class="column1">
+			<hr>
+			<div class="title-bar">
+					<span class="title-text">{{ book.title }}</span><br>
+			</div>
+			<hr><br>
+			<div class="header-bar">
+				<div class="header-div1">
+					<span class="descriptor"> Author: &nbsp; &nbsp; &nbsp; &nbsp;</span>
+					<span class="field">
+
+						<a href="{% url 'products:author' book.author.id %}" style="color:gray;">
+							{{ book.author.first_name }} {{book.author.last_name }}
+						</a>
+					</span>
+					<br>
+					<span class="descriptor">Genre:	&nbsp; &nbsp; &nbsp;	&nbsp;	&nbsp;</span>{{ book.genre }}<br>
+					<span class="descriptor">Publisher:	&nbsp;	&nbsp;</span>{{ book.publisher }}<br>
+				</div>
+				<div class="header-div2">
+					<span class="descriptor">Rating:	&nbsp;	&nbsp;</span>{{ book.rating }}<br>
+					<span class="descriptor">Price:	&nbsp;	&nbsp;	&nbsp;</span>${{ book.price }}<br>
+					<span class="descriptor">Release: &nbsp;</span> {{ book.release_date }}<br>
+				</div>
+			</div>
+
+			<br>
+			<div class="description-bar">
+				<span class="descriptor">Description:</span>
+				<br>
+				<div class="description-text-div">{{ book.description }}</div>
+			</div>
+			<br>
+
+
+
+
+			<br>
+			<div class="header-bar">
+				<form method="POST"  id="newCommentForm">
+					{% csrf_token %}{{ form.as_p }}
+
+					<input type="hidden" name="title" value="{{ book.title }}">
+					<input type="hidden" name="book_id" value="{{ book.id }}">
+					<input type="hidden" name="user" value="{{ user.nickname }}">
+					<textarea class="comment-Text-Area" name="newcomment" onclick="this.focus();this.select()" rows="4" cols="50" form="newCommentForm">
+						Post a comment as {% if user.is_authenticated %}{{ user.nickname }}.
+						{% else %} Anonymous.
+						{% endif %}
+					</textarea>
+                    <br>
+                    <button type="submit" class="btn btn-md btn-primary">Submit</button>
+
+				</form>
+			</div>
+		</div>
+		<div class="column2">
+			<div class="coverImgDiv">
+					<img id="cover-img" src="{% static  book.cover_file_name  %}"/>
+					<br>
+					<div class="purchase-bar">
+						{% include 'payments/quantityForm.html' %}
+					</div>
+			</div>
+		</div>
+		<br>
+		<div class="row2">
+			<div class="header-bar2">
+                <hr>
+                <span class="title-text2">User Comments:</span>
+                <br><hr>
+				{% for comment in comment %}
+					<hr>
+						<div class="comment-Text-Area">
+							<span class="descriptor">{{comment.user}} wrote:<span>
+							<br>
+							<div class="commentBlock">
+								<span class="quotation">"</span>
+								<br>
+								<span class="comment-text">{{comment.comment}}</span>
+								<br>
+								<span class="right-align quotation">"</span>
+								<br>
+							</div>
+						</div>
+				{% empty %}
+					<span class="centeredText">Be the first to leave a comment!</span>
+				{% endfor %}
+				<hr>
+			</div>
+
+			<div class="review-bar">
+				<div class="header-bar2">
+                    <span class="title-text2">Purchaser's Reviews:</span>
+                    <br><hr>
+					{% for review in reviews %}
+						<div class="comment-Text-Area">
+							<span class="descriptor">{{review.review_header}}</span>
+							<br>
+							<div class="commentBlock">
+								<span class="quotation">"</span>
+								<br>
+								<span class="comment-text">{{review.review_body}}</span>
+								<br>
+								<span class="right-align quotation">"</span>
+								<br>
+							</div>
+						</div>
+						<hr>
+					{% endfor %}
+				</div>
+                <div class="header-bar2">
+                    <div>
+						<a class="btn btn-default" data-toggle="modal" data-target="#modalReview">Write Review for {{book.title}}</a>
+						<!-- Review Form Modal -->
+						<div class="modal fade" id="modalReview" role="dialog">
+						   <div class="modal-dialog">
+							   <div class="modal-content">
+									{% include 'products/bookReview.html' %}
+							   </div>
+						   </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <div id="myModal" class="modal">
+            <span class="close" onclick="document.getElementById('myModal').style.display='none'">&times;</span>
+            <img class="modal-content" id="img01">
+            <div id="caption"></div>
         </div>
-        <div class="col-xs-3 col-sm-3 col-sm-push-2" style="border-right:1px solid black; height:310px;">
-            <h3>{{ book.title }}</h3>
-            <h4>by {{ book.author.first_name }} {{book.author.last_name }}</h4>
-            <h3>
-            {% if book.rating >= 4 %}
-                <span class="label label-success">Rating:  {{ book.rating }}</span>
-            {% elif 2 < book.rating < 4 %}
-                <span class="label label-warning">Rating:  {{ book.rating}}</span>
-            {% else %}
-                <span class="label label-danger">Rating:  {{ book.rating }}</span>
-            {% endif %}
-          </h3>
-        </div>
-        <div class="col-xs-3 col-sm-2 col-sm-push-3"  >
-            <h3>Paperback</h3>
-            <h3>${{ book.price }}</h3>
-            <p style="padding:5px;"></p>
-            {% include 'payments/quantityForm.html' %}
 
-            <form method="POST" action="{% url 'payments:addFutureBookOrder' %}">{% csrf_token %}
-                <input type="hidden" name="book_id" value="{{ book.id }}">
-                <input type="hidden" name="next" value="{{ request.path }}">
-                <button class="btn btn-md btn-primary">Add to Future Order</button>
-            </form>
-
-        </div>
-    </div>
-    <hr>
-
-    <div class="row">
-        <div class="col-sm-push-1" style="text-align:center" >
-            <h2>Description</h2>
-        </div>
-    </div>
-    <div class="row">
-        <div class=" col-sm-4 col-sm-push-4 ">
-            <p>{{ book.description }}</p>
-        </div>
-    </div>
-    <hr>
-
-    <div class="row">
-        <div class="col-sm-push-1">
-            <h2 style="text-align:center">Publishing Info</h2>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-4 col-sm-push-4">
-            <table style="table-layout:fixed; width:450px;">
-                <tr>
-                    <td>Publisher</td>
-                    <td>{{ book.publisher }}</td>
-                </tr>
-                <tr>
-                    <td>Release Date</td>
-                    <td>{{ book.release_date }}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <hr>
-
-    <div class="row">
-        <div class="col-sm-push-1" style="text-align:center">
-            <h2>Author Biography</h2>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class=" col-sm-4 col-sm-push-4 ">
-            <p>{{ book.author.bio }}</p>
-            <p style="padding:10px"></p>
-            {% if book_by_author|length > 1 %}
-                <a href="{% url 'products:bookByAuthor' book.author.id %}" style="color:gray;">More Books by
-                    {{ book.author.first_name }} {{book.author.last_name }}</a>
-            {% endif %}
-        </div>
-    </div>
-    <hr>
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-8 col-sm-push-1">
-            <h2>Customer Reviews</h2>
-
-            {% if not reviews %}
-                <p>Purchase the book to be the first to leave a review! </p>
-            {% endif %}
+    </body>
+    </html>
 
 
-            <!-- Review Form Modal -->
-            <div class="modal fade" id="modalReview" role="dialog">
-               <div class="modal-dialog">
-                   <div class="modal-content">
-                        {% include 'products/bookReview.html' %}
-                   </div>
-               </div>
-            </div>
-
-            <p style="padding:15px;"></p>
-
-            {% for review in reviews %}
-            <div class="well">
-                <div class="row">
-                    <h2>
-                        {{ review.review_header }}
-                        {% if review.user_rating >= 4 %}
-                            <span class="label label-success">Rating:  {{ review.user_rating }}</span>
-                        {% elif 2 < review.user_rating < 4 %}
-                            <span class="label label-warning">Rating:  {{ review.user_rating }}</span>
-                        {% else %}
-                            <span class="label label-danger">Rating:  {{ review.user_rating }}</span>
-                        {% endif %}
-                    </h2>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <h4>
-                            {% if review.anonymous is True %}
-                                By Anonymous
-                            {% else %}
-                                By {{review.user.nickname}}
-                            {% endif %}
-                        </h4>
-                    </div>
-                    <div class="col-md-4">
-                        <h4>
-                            on {{review.published_date}}
-                        </h4>
-                    </div>
-                </div>
-                <div class="row">
-                    <p>{{review.review_body}}</p>
-                </div>
-            </div>
-            {% endfor %}
-
-            {% if allowed_to_review %}
-                <p style="padding:5px;"></p>
-                <a class="btn btn-lg btn-success" data-toggle="modal" data-target="#modalReview"
-                   href="#">Write Review</a>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="modal fade " id="imageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-              <img src="" id="imagepreview" class="img-responsive" style="margin:0 auto; height: 550px; width:auto; ">
-            </div>
-          </div>
-        </div>
-    </div>
-
-
-    <p style="padding:25px"></p>
-</div>
-
-
-{% endblock  %}
-
-{% block javascript_code %}
-<script>
-    $('#pop').on('click',function(){
-        $('#imagepreview').attr('src', $('#imageResource').attr('src'));
-        $('#imageModal').modal('show');
-    });
-
-
-</script>
 {% endblock %}
