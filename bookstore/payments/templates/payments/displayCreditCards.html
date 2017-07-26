@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% load static from staticfiles %}
 
 {# Load the tag library #}
 {% load bootstrap3 %}
@@ -18,6 +19,11 @@
 <div class="container">
     <h2>Credit/Debit Cards</h2>
     <p style="padding:20px;"></p>
+
+    {% if not cards %}
+        <img src="{% static 'img/nothing2.png' %}" class="img-responsive" style="margin: 0 auto; padding-top:40p;">
+        <p style="padding:15px;"></p>
+    {% endif %}
     {% for card in cards %}
         <h3>Card {{ forloop.counter }}</h3>
         <h4>{{ card.cc_number }}</h4>
