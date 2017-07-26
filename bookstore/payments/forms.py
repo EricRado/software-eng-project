@@ -38,9 +38,6 @@ class CreditCardForm(ModelForm):
         expiration_date = self.cleaned_data['expiration']
         today = datetime.date.today()
 
-        print('Expiration Date : ' + str(expiration_date))
-        print('Today : ' + str(today))
-
         if expiration_date < today:
             raise forms.ValidationError('Card is expired.')
 

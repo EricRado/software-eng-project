@@ -8,6 +8,7 @@ from accounts.models import User
 from products.models import Book
 from .forms import ReviewForm
 from payments.models import Order, OrderItem
+import decimal
 
 
 def books_by_genre(request, genre):
@@ -72,12 +73,13 @@ def get_review_form(request):
     book_id = request.POST.get('book_id')
     user_id = request.user.user_id
 
+    book = Book.objects.get(id=book_id)
+
     # check if user previously reviewed book
     check = user_left_review(user_id,book_id)
     if check:
         messages.error(request, 'You already left a review for this book.')
         return HttpResponseRedirect(next)
-
 
     form = ReviewForm(request.POST)
     template_name = 'products/bookReview.html'
@@ -85,10 +87,13 @@ def get_review_form(request):
     if request.method == 'POST':
         if form.is_valid():
             # assign user id to review form
+            rating = form.cleaned_data['user_rating']
             review = form.save(commit=False)
             review.user = User.objects.get(user_id=user_id)
             review.book = Book.objects.get(id=book_id)
             review.save()
+
+            modifiy_book_rating(book, rating)
 
             messages.success(request, 'Review was submitted successfully.')
     else:
@@ -125,3 +130,17 @@ def purchased_book(book_id, user_id):
             return True
 
     return False
+
+
+# formula for average book rating = sum of all ratings by users / number of reviews submitted
+def modifiy_book_rating(book, rating):
+    # sum of all ratings by users
+    total_rating = decimal.Decimal(rating)+ decimal.Decimal(book.rating * book.review_count)
+
+    # total review count including the recently submitted
+    book.review_count += 1
+
+    # calculate new book rating
+    book.rating = decimal.Decimal(total_rating) / decimal.Decimal(book.review_count)
+
+    book.save()

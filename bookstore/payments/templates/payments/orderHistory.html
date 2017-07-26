@@ -6,7 +6,7 @@
 {% block content %}
 
 <div class="container">
-    <h1 style="padding-bottom:50px;">Order History</h1>
+    <h1 style="padding-bottom:30px;">Order History</h1>
     {% for order in orders %}
         <h3>Order Id # {{ order.id }}</h3>
         <p style="padding:5px;"></p>
@@ -46,6 +46,7 @@
     {% if not orders %}
     <img src="{% static 'img/orderHistoryEmpty.png' %}" class="img-responsive" style="margin: 0 auto; padding-top:60px;">
     {% endif %}
+     <p style="padding:25px"></p>
 </div>
 
 {% endblock %}

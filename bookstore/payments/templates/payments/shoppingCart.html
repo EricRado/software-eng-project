@@ -10,6 +10,7 @@
     <p style="padding:10px"></p>
     {% if not order_items %}
         <h2>Shopping Cart is Empty</h2>
+        <img class="img-responsive" src="{% static 'img/cartIsEmpty.png' %}" style="margin: 0 auto; padding-top:60px;">
     {% else %}
         <div class="row">
             <div class="col-xs-8 col-sm-8">

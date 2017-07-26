@@ -22,6 +22,15 @@
                 <div class="col-xs-12 col-sm-5 col-sm-push-1">
                     <a href="{% url 'products:bookDetail' tech_valley.book.title %}" style="color:gray;"><h4>{{ tech_valley.book.title }} </h4></a>
                     <p style="color:gray"> by {{ tech_valley.book.author.first_name }} {{ tech_valley.book.author.last_name }} </p>
+                    <p>
+                    {% if tech_valley.book.rating >= 4 %}
+                        <span class="label label-success">Rating:  {{ tech_valley.book.rating }}</span>
+                    {% elif 2 < tech_valley.book.rating < 4 %}
+                        <span class="label label-warning">Rating:  {{ tech_valley.book.rating}}</span>
+                    {% else %}
+                        <span class="label label-danger">Rating:  {{ tech_valley.book.rating }}</span>
+                    {% endif %}
+                    </p>
                     <p style="padding:5px"> </p>
                     <span class="badge">${{ tech_valley.book.price }}</span>
                 </div>
