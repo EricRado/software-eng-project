@@ -1,13 +1,18 @@
+import datetime
+
 from django.forms import ModelForm
 from django import forms
 from .models import CreditCard
 
+PROVIDERS = [('Visa', 'Visa'), ('MasterCard', 'MasterCard'), ('Discovery','Discovery')]
+
 
 class CreditCardForm(ModelForm):
-    name_on_card = forms.CharField(label='Name On Card', max_length=150)
+    name_on_card = forms.CharField(widget=forms.TextInput())
     cc_number = forms.CharField(label='Card Number', max_length=16)
     security_code = forms.CharField(label='Security Code', max_length=3)
     expiration = forms.DateField(label='Expiration Date')
+    provider = forms.ChoiceField(choices=PROVIDERS, widget=forms.RadioSelect)
 
     def clean_cc_number(self):
         cc_number = self.cleaned_data['cc_number']
@@ -29,6 +34,21 @@ class CreditCardForm(ModelForm):
 
         return security_code
 
+    def clean_expiration(self):
+        expiration_date = self.cleaned_data['expiration']
+        today = datetime.date.today()
+
+        print('Expiration Date : ' + str(expiration_date))
+        print('Today : ' + str(today))
+
+        if expiration_date < today:
+            raise forms.ValidationError('Card is expired.')
+
+        return expiration_date
+
     class Meta:
         model = CreditCard
-        fields = ['name_on_card', 'cc_number', 'security_code', 'expiration']
+        fields = ['name_on_card', 'cc_number', 'security_code', 'expiration', 'provider']
+
+
+
