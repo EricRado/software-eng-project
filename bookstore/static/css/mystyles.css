@@ -125,3 +125,14 @@ hr{
 .carousel-inner > .item > img {
     margin: 0 auto;
 }
+
+.glyphicon-large {
+    font-size: 100px;
+}
+.reasons-why {
+    text-align: center;
+}
+.reasons-why p {
+    margin-bottom: 30px;
+    font-family: sans-serif;
+}
