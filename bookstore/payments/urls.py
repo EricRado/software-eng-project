@@ -1,11 +1,10 @@
 from django.conf.urls import url
-from django.views.generic import RedirectView
 from . import views
 
 urlpatterns = [
     url(r'^shoppingCart/', views.display_shopping_cart, name='shoppingCart'),
     url(r'^purchasedOrder/', views.order_submit, name='orderSubmit'),
-    url(r'^orderHistory/', views.display_order_history, name='orderHistory'),
+    url(r'^purchaseHistory/', views.display_order_history, name='orderHistory'),
     url(r'^updateCart/', views.update_from_shopping_cart_page, name='updateShoppingCart'),
     url(r'^addBook/', views.add_book_to_cart, name='addBook'),
     url(r'^addFutureBook/', views.add_future_order_item, name='addFutureBookOrder'),
