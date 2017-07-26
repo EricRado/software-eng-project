@@ -131,12 +131,11 @@
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'accounts:manageAccount' %}">Manage Account</a></li>
 
-                            <li><a href="#">Change Password</a></li>
-
                             <li><a href="{% url 'accounts:changePassword' %}">Change Password</a></li>
 
                             <li><a href="{% url 'payments:displayCC' %}">Manage Payment Method</a></li>
                             <li><a href="{% url 'accounts:displayAddress' %}">Manage Shipping Address</a></li>
+                            <li><a href="#">Order History</a></li>
                         </ul>
                     </li>
                     {% else %}
