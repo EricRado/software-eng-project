@@ -16,7 +16,9 @@
 
             <div class="row">
                 <div class="col-xs-12 col-sm-3 col-sm-offset-3">
+                  <a href="{% url 'products:bookDetail' tech_valley.book.title %}">
                     <img src="{% static  tech_valley.book.cover_file_name  %}" class="result" height="200" width="200">
+                  </a>
                 </div>
 
                 <div class="col-xs-12 col-sm-5 col-sm-push-1">
