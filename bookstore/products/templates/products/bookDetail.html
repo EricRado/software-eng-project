@@ -29,7 +29,7 @@
             <h3>
             {% if book.rating >= 4 %}
                 <span class="label label-success">Rating:  {{ book.rating }}</span>
-            {% elif 2 < book.rating < 4 %}
+            {% elif 2 < book.rating  and book.rating < 4 %}
                 <span class="label label-warning">Rating:  {{ book.rating}}</span>
             {% else %}
                 <span class="label label-danger">Rating:  {{ book.rating }}</span>
@@ -128,11 +128,13 @@
                 <div class="row">
                     <h2>
                         {{ review.review_header }}
-                        {% if review.user_rating >= 4 %}
+                        {% if review.user_rating >= 4.0 %}
                             <span class="label label-success">Rating:  {{ review.user_rating }}</span>
-                        {% elif 2 < review.user_rating < 4 %}
+                        {% endif %}
+                        {% if 2.0 < review.user_rating and review.user_rating < 4.0 %}
                             <span class="label label-warning">Rating:  {{ review.user_rating }}</span>
-                        {% else %}
+                        {% endif %}
+                        {% if review.user_rating < 2.0 %}
                             <span class="label label-danger">Rating:  {{ review.user_rating }}</span>
                         {% endif %}
                     </h2>

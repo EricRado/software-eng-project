@@ -25,7 +25,7 @@
                     <p>
                     {% if tech_valley.book.rating >= 4 %}
                         <span class="label label-success">Rating:  {{ tech_valley.book.rating }}</span>
-                    {% elif 2 < tech_valley.book.rating < 4 %}
+                    {% elif 2 < tech_valley.book.rating and tech_valley.book.rating < 4 %}
                         <span class="label label-warning">Rating:  {{ tech_valley.book.rating}}</span>
                     {% else %}
                         <span class="label label-danger">Rating:  {{ tech_valley.book.rating }}</span>
@@ -60,7 +60,7 @@
                     <p>
                     {% if book.rating >= 4 %}
                         <span class="label label-success">Rating:  {{ book.rating }}</span>
-                    {% elif 2 < book.rating < 4 %}
+                    {% elif 2 < book.rating and book.rating < 4 %}
                         <span class="label label-warning">Rating:  {{ book.rating}}</span>
                     {% else %}
                         <span class="label label-danger">Rating:  {{ book.rating }}</span>
