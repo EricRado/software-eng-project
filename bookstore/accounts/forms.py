@@ -153,6 +153,14 @@ class AddressForm(ModelForm):
 
         return state
 
+    def clean_street_address(self):
+        street_address = self.cleaned_data['street_address']
+
+        if street_address.isdigit() or len(street_address) == 5:
+            raise forms.ValidationError('Street Address is invalid.')
+
+        return street_address
+
     class Meta:
         model = Address
         fields = ['street_address', 'city', 'state', 'zip_code']
